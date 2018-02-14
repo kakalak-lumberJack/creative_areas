@@ -5,7 +5,9 @@ Use /creative_area <area ID number> to add area to list of areas where creative 
 Depends on Advanced Areas Mod by Shadow Ninja
 
 To Do:
-Find work around to make mod work with creative priv.
+-Find work around to make mod work with creative priv.
+-Add command to remove areas from creative area list.
+-Add support to automatically check for and remove areas from creative list which are no long defined by areas mod.
 
 
 
