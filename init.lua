@@ -27,7 +27,7 @@ function make_cr_area(name, areaID)
 		table.insert(cr_areas, id)
 		write_file(cr_areas_file, cr_areas)
 		minetest.chat_send_player(name, "Area added to Creative Areas!")
-	else minetest.chat_send_player(name, "Not a valid area ID")	 
+	else minetest.chat_send_player(name, "Not a valid area ID")
 	end
 end
 
@@ -39,7 +39,7 @@ function check_cr_area(player)
 	if cr_areas ~= nil then
 		for _, areaID in ipairs(cr_areas) do
 			for _, in_area in ipairs(area_at_pos) do
-				if in_area["pos1"] ~= nil 
+				if in_area["pos1"] ~= nil
 				and in_area["pos1"] == areas.areas[areaID]["pos1"]
 				and in_area["name"] == areas.areas[areaID]["name"] then
 					status = true
@@ -75,8 +75,8 @@ minetest.register_globalstep(function(dtime)
 	if timer >= 3 then
 		for _, player in ipairs(minetest.get_connected_players()) do
 			local pname = player:get_player_name()
-			local privs = minetest.get_player_privs(pname)			
-			if minetest.get_player_privs(pname).teacher == nil then 
+			local privs = minetest.get_player_privs(pname)
+			if minetest.get_player_privs(pname).teacher == nil then
 				if 	check_cr_area(player) == true then
 					privs.give = true
 					minetest.set_player_privs(pname, privs)
@@ -90,4 +90,4 @@ minetest.register_globalstep(function(dtime)
 	end
 end)
 
-
+-- AndroBuilder git-Test
