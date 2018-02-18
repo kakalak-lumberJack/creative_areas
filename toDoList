@@ -1,0 +1,14 @@
+- show list of created Areas (each area with unique ID)
+- give/take more than one priv (fly, interact, ...)
+- delete Areas
+- edit Areas (change size / position? / change privs given-taken)
+- clear inventory once leaving a "creative area"
+- save inventory entering an area and restore it once leaving this area
+
+
+
+Connection to different Mods
+
+- connect to World-Edit Areas
+- connect to EDUtest (https://forum.minetest.net/viewtopic.php?f=9&t=18988)
+- use "groups" of the faction - Mod (https://forum.minetest.net/viewtopic.php?id=3294)
