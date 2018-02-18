@@ -1,9 +1,11 @@
-Creative_areas is a minetest mod allowing defined areas to be creative/sandbox areas adjusting players privliges and inventories appropriately as they leave or enter these areas.
+# Creative_areas 
 
-Use /creative_area <area ID number> to add area to list of areas where creative mode is enabled.
+Creative Areas is a minetest mod allowing areas defined by the Areas mod to be designated as creative/sandbox areas adjusting players privliges and inventory formspecs appropriately as they leave or enter these areas.
 
-Depends on Advanced Areas Mod by Shadow Ninja
+* Use /creative_area <area ID number> to add area to list of areas where creative mode is enabled. 
+* Use /rm_creative_areas <area ID number> to remove an area from the list.
 
+Depends on Advanced Areas Mod by Shadow Ninja and the Creative mod included in Minetest Game.
 
 MIT License:
 Copyright 2018 kakalak-lumberJack
