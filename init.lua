@@ -27,7 +27,7 @@ function make_cr_area(name, areaID)
 		table.insert(cr_areas, id)
 		write_file(cr_areas_file, cr_areas)
 		minetest.chat_send_player(name, "Area added to Creative Areas!")
-	else minetest.chat_send_player(name, "Not a valid area ID")
+	else minetest.chat_send_player(name, "Not a valid area ID")	 
 	end
 end
 
@@ -35,20 +35,30 @@ function check_cr_area(player)
 	local pos = player:get_pos()
 	local area_at_pos = areas:getAreasAtPos(pos)
 	local status = false
-	--minetest.chat_send_all(minetest.serialize(area_at_pos))
-	if cr_areas ~= nil then
-		for _, areaID in ipairs(cr_areas) do
-			for _, in_area in ipairs(area_at_pos) do
-				if in_area["pos1"] ~= nil
-				and in_area["pos1"] == areas.areas[areaID]["pos1"]
-				and in_area["name"] == areas.areas[areaID]["name"] then
+	if #cr_areas >= 1 then
+		for i = 1, #cr_areas do
+			local areaID = cr_areas[i]
+			for _, in_area in pairs(area_at_pos) do
+				--if in_area["pos1"] ~= nil 
+				if in_area["pos1"] == areas.areas[areaID]["pos1"]
+				 and in_area["name"] == areas.areas[areaID]["name"] then
 					status = true
 				end
 			end
 		end
-		return status
 	end
+	return status
 end
+
+local function on_grant_revoke(grantee, granter, priv)
+    if priv == "creative" then
+        local player = mientest.get_player_by_name(grantee)
+        if player then
+			sfinv.set_player_inventory_formspec(player, context)        
+		end
+    end
+end
+
 
 --Initialize mod
 minetest.register_privilege("teacher", "Give access to teacher features.")
@@ -72,22 +82,29 @@ minetest.register_chatcommand("creative_area", {
 local timer = 0
 minetest.register_globalstep(function(dtime)
 	timer = timer + dtime
-	if timer >= 3 then
+	if timer >= math.random(1,3) then
 		for _, player in ipairs(minetest.get_connected_players()) do
 			local pname = player:get_player_name()
-			local privs = minetest.get_player_privs(pname)
-			if minetest.get_player_privs(pname).teacher == nil then
+			local privs = minetest.get_player_privs(pname)			
+			--if minetest.get_player_privs(pname).teacher == nil then 
 				if 	check_cr_area(player) == true then
-					privs.give = true
-					minetest.set_player_privs(pname, privs)
+					if not minetest.check_player_privs(pname, {creative = true}) then
+						privs.creative = true
+						minetest.set_player_privs(pname, privs)
+						sfinv.set_player_inventory_formspec(player)
+						minetest.chat_send_player(pname, "You are in creative area.")
+					end
 				else
-					privs.give = nil
-					minetest.set_player_privs(pname, privs)
+					if minetest.check_player_privs(pname, {creative=true}) then
+						privs.creative = nil
+						minetest.set_player_privs(pname, privs)
+						local context = {page = sfinv.get_homepage_name(player)}
+						sfinv.set_player_inventory_formspec(player, context)
+						minetest.chat_send_player(pname, "Leaving creative area.")
+					end
 				end
-			end
+			--end
 		end
 		timer = 0
 	end
 end)
-
--- AndroBuilder git-Test
