@@ -1,6 +1,3 @@
-local cr_areas_file = minetest.get_worldpath().."/creative_areas.dat"
---local inv_file = minetest.get_worldpath().."/creative_areas_inv.dat"
-
 local storage = minetest.get_mod_storage()
 local cr_areas = minetest.deserialize(storage:get_string("cr_areas")) or {}
 ---------------
