@@ -37,7 +37,7 @@ function check_cr_area(player)
 	local pos = player:get_pos()
 	local area_at_pos = areas:getAreasAtPos(pos)
 	local status = false
-	if #cr_areas >= 1 then
+	if cr_areas ~= {} then
 		for i = 1, #cr_areas do
 			local areaID = cr_areas[i]
 			-- Clean up creative areas which are have been deleted from Areas mod
@@ -74,6 +74,23 @@ minetest.register_chatcommand("rm_creative_area", {
 	privs = {privs = true},
 	func = function(name, param)
 		rm_cr_area(name, param)
+	end
+})
+	
+minetest.register_chatcommand("ls_creative_areas", {
+	description = "List creative areas and IDs",
+	params = "",
+	func = function(name, params)
+		local list = ""
+		if cr_areas ~= {} then
+			for i = 1, #cr_areas do
+				local id = tonumber(cr_areas[i])
+				local area_name = areas.areas[ id ]["name"]
+				list = list .. " " .. area_name .. " (ID="..id..")"
+			end
+			minetest.chat_send_player(name, "Creative Area (ID): "..list)
+		else minetest.chat_send_player(name, "No creative areas found")
+		end
 	end
 })
 -------------------------------------------------

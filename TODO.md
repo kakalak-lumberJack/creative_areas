@@ -1,14 +1,14 @@
 # To Do
 
-_Note: Please use submit "New Issue" for each future feature requests as this will be easier to track and close as features are added. This list should be reserved for currently planned major features and phased out eventually._
-* Add command to remove areas from creative area list.
-* Add support to automatically check for and remove areas from creative list which are no long defined by areas mod.
-* Show list of created Areas (each area with unique ID)
-* Give/take more than one priv (fly, interact, ...)
+_Note: Please submit "New Issue" for each future feature requests as this will be easier to track and close as features are added. This list should be reserved for currently planned major features and phased out asap._
+* ~~Add command to remove areas from creative area list.~~ Done
+* ~~Add support to automatically check for and remove areas from creative list which are no long defined by areas mod.~~ Done
+* ~~Show list of created Areas (each area with unique ID)~~
+* Give/take more than one priv (fly, interact, ...) * This feature request needs more explanation
 * ~~delete Areas~~ This is handled by the Areas mod.
 * ~~edit Areas (change size / position? / change privs given-taken)~~ First 2 handled by Areas. 3rd already listed 
-* clear inventory once leaving a "creative area"
-* save inventory entering an area and restore it once leaving this area
+* ~~clear inventory once leaving a "creative area"~~
+* ~~save inventory entering an area and restore it once leaving this area~~
 
 ~~Connection to different Mods~~
 ~~connect to World-Edit Areas~~ 
