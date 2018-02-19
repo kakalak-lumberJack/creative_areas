@@ -1,5 +1,8 @@
 local cr_areas_file = minetest.get_worldpath().."/creative_areas.dat"
-local cr_areas = {}
+--local inv_file = minetest.get_worldpath().."/creative_areas_inv.dat"
+
+local storage = minetest.get_mod_storage()
+local cr_areas = minetest.deserialize(storage:get_string("cr_areas")) or {}
 ---------------
 -- Functions
 ---------------
@@ -32,8 +35,9 @@ function make_cr_area(name, areaID)
 			end
 		end	
 		table.insert(cr_areas, id)
-		write_file(cr_areas_file, cr_areas)
-		minetest.chat_send_player(name, "Area added to Creative Areas!")	
+		--write_file(cr_areas_file, cr_areas)
+		storage:set_string("cr_areas", minetest.serialize(cr_areas))
+		minetest.chat_send_player(name, "Area added to Creative Areas!")
 	else minetest.chat_send_player(name, "Not a valid area ID")	 
 	end
 end
@@ -75,10 +79,16 @@ end
 ---------------------
 --Initialize mod
 -------------------
+--[[
+local tbl = storage:to_table() 
+	if tbl ~= nil then
+	cr_areas = tbl["fields"]
+end
+
 if cr_areas_file ~= nil then
 	cr_areas = load_file(cr_areas_file)
 end
-
+]]--
 -- Chat Commands
 minetest.register_chatcommand("creative_area", {
 	description = "Sets area to grant players creative priv while inside it",
@@ -105,7 +115,8 @@ minetest.register_globalstep(function(dtime)
 	if timer >= math.random(1,3) then 
 		for _, player in ipairs(minetest.get_connected_players()) do
 			local pname = player:get_player_name()
-			local privs = minetest.get_player_privs(pname)			
+			local privs = minetest.get_player_privs(pname)	
+			local inv = minetest.get_inventory({type="player", name=pname})
 			--if minetest.get_player_privs(pname).privs == nil then --Players with the "privs" priv will not have privileges effected.
 				if 	check_cr_area(player) == true then
 					if not minetest.check_player_privs(pname, {creative = true}) then
@@ -113,12 +124,24 @@ minetest.register_globalstep(function(dtime)
 						minetest.set_player_privs(pname, privs)
 						local context = {page = sfinv.get_homepage_name(player)}--minetest.get_inventory{{type="detached", name="creative_"..pname}}--{page = sfinv.pages["creative_"..pname]}
 						sfinv.set_player_inventory_formspec(player, context)
+						local invlist = inv:get_list("main")
+						inv:set_list("saved", invlist)
+						local list = ""
+						for i = 1, #invlist do
+							list = list .." "..dump(invlist[i]) 
+						end	
+						--write_file(inv_file,)
 						minetest.chat_send_player(pname, "You are in creative area.")
+						
 					end
 				else
 					if minetest.check_player_privs(pname, {creative=true}) then
 						privs.creative = nil
 						minetest.set_player_privs(pname, privs)
+						local saved = inv:get_list("saved")
+						if saved ~= nil then
+							inv:set_list("main", saved)
+						end
 						local context = {page = sfinv.get_homepage_name(player)}
 						sfinv.set_player_inventory_formspec(player, context)
 						minetest.chat_send_player(pname, "You have left creative area.")
