@@ -6,25 +6,8 @@ local cr_areas = minetest.deserialize(storage:get_string("cr_areas")) or {}
 ---------------
 -- Functions
 ---------------
-function load_file(fname)
-	local file, err = io.open(fname, "r")
-	if not err then
-		local tbl = minetest.deserialize(file:read())
-		return tbl
-	else minetest.log("ERROR [creative_areas] "..err)
-	end
-end
-
-function write_file(fname, tbl)
-	local entry = minetest.serialize(tbl)
-	local file, err = io.open(fname, "w")
-	if not err then
-		file:write(entry); file:flush(); file:close()
-	else minetest.log("ERROR [creative_areas] "..err)
-	end
-end
---Adds creative area to list.
-function make_cr_area(name, areaID)
+-- Add creative area to list.
+local function make_cr_area(name, areaID)
 	local id = tonumber(areaID)
 	if areas.areas[id] ~= nil then
 		if cr_areas ~= {} then
@@ -35,19 +18,18 @@ function make_cr_area(name, areaID)
 			end
 		end	
 		table.insert(cr_areas, id)
-		--write_file(cr_areas_file, cr_areas)
 		storage:set_string("cr_areas", minetest.serialize(cr_areas))
 		minetest.chat_send_player(name, "Area added to Creative Areas!")
 	else minetest.chat_send_player(name, "Not a valid area ID")	 
 	end
 end
 --Removes Creative Area
-function rm_cr_area(name, areaID)
+local function rm_cr_area(name, areaID)
 	local id = tonumber(areaID) 
 	for i = 1, #cr_areas do
 		if cr_areas[i] == id then
 			table.remove(cr_areas, i)
-			write_file(cr_areas_file, cr_areas)
+			storage:set_string("cr_areas", minetest.serialize(cr_areas))
 			return minetest.chat_send_player(name, "Creative area removed!")
 		end
 	end
@@ -64,6 +46,7 @@ function check_cr_area(player)
 			-- Clean up creative areas which are have been deleted from Areas mod
 			if areas.areas[areaID] == nil then 
 				table.remove(cr_areas, i)
+				storage:set_string("cr_areas", minetest.serialize(cr_areas))
 			end 
 			-- Compare Areas which  player are in with Creative Area. Grant/revoke creative priv accordingly."
 			for _, in_area in pairs(area_at_pos) do
@@ -76,20 +59,9 @@ function check_cr_area(player)
 	end
 	return status
 end
----------------------
---Initialize mod
--------------------
---[[
-local tbl = storage:to_table() 
-	if tbl ~= nil then
-	cr_areas = tbl["fields"]
-end
-
-if cr_areas_file ~= nil then
-	cr_areas = load_file(cr_areas_file)
-end
-]]--
+--------------------
 -- Chat Commands
+-------------------
 minetest.register_chatcommand("creative_area", {
 	description = "Sets area to grant players creative priv while inside it",
 	params = "<AreaID>",
@@ -107,8 +79,9 @@ minetest.register_chatcommand("rm_creative_area", {
 		rm_cr_area(name, param)
 	end
 })
-
+-------------------------------------------------
 -- Check location and Grant/revoke creative priv
+-------------------------------------------------
 local timer = 0
 minetest.register_globalstep(function(dtime)
 	timer = timer + dtime
@@ -117,7 +90,7 @@ minetest.register_globalstep(function(dtime)
 			local pname = player:get_player_name()
 			local privs = minetest.get_player_privs(pname)	
 			local inv = minetest.get_inventory({type="player", name=pname})
-			--if minetest.get_player_privs(pname).privs == nil then --Players with the "privs" priv will not have privileges effected.
+			if minetest.get_player_privs(pname).privs == nil then --Players with the "privs" priv will not have privileges effected.
 				if 	check_cr_area(player) == true then
 					if not minetest.check_player_privs(pname, {creative = true}) then
 						privs.creative = true
@@ -147,7 +120,7 @@ minetest.register_globalstep(function(dtime)
 						minetest.chat_send_player(pname, "You have left creative area.")
 					end
 				end
-			--end
+			end
 		end
 		timer = 0
 	end
