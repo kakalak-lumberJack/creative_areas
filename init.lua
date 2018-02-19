@@ -1,12 +1,13 @@
 local cr_areas_file = minetest.get_worldpath().."/creative_areas.dat"
 local cr_areas = {}
-
---functions
+---------------
+-- Functions
+---------------
 function load_file(fname)
 	local file, err = io.open(fname, "r")
 	if not err then
 		local tbl = minetest.deserialize(file:read())
-		cr_areas = tbl
+		return tbl
 	else minetest.log("ERROR [creative_areas] "..err)
 	end
 end
@@ -48,8 +49,7 @@ function rm_cr_area(name, areaID)
 	end
 	return minetest.chat_send_player(name, "Not a creative area ID")
 end
-
-
+-- Checks players location against listed creative areas.
 function check_cr_area(player)
 	local pos = player:get_pos()
 	local area_at_pos = areas:getAreasAtPos(pos)
@@ -72,11 +72,11 @@ function check_cr_area(player)
 	end
 	return status
 end
-
+---------------------
 --Initialize mod
-
+-------------------
 if cr_areas_file ~= nil then
-	load_file(cr_areas_file)
+	cr_areas = load_file(cr_areas_file)
 end
 
 -- Chat Commands
@@ -106,12 +106,13 @@ minetest.register_globalstep(function(dtime)
 		for _, player in ipairs(minetest.get_connected_players()) do
 			local pname = player:get_player_name()
 			local privs = minetest.get_player_privs(pname)			
-			if minetest.get_player_privs(pname).privs == nil then --Players with the "privs" priv will not have privileges effected.
+			--if minetest.get_player_privs(pname).privs == nil then --Players with the "privs" priv will not have privileges effected.
 				if 	check_cr_area(player) == true then
 					if not minetest.check_player_privs(pname, {creative = true}) then
 						privs.creative = true
 						minetest.set_player_privs(pname, privs)
-						sfinv.set_player_inventory_formspec(player)
+						local context = {page = sfinv.get_homepage_name(player)}--minetest.get_inventory{{type="detached", name="creative_"..pname}}--{page = sfinv.pages["creative_"..pname]}
+						sfinv.set_player_inventory_formspec(player, context)
 						minetest.chat_send_player(pname, "You are in creative area.")
 					end
 				else
@@ -123,7 +124,7 @@ minetest.register_globalstep(function(dtime)
 						minetest.chat_send_player(pname, "You have left creative area.")
 					end
 				end
-			end
+			--end
 		end
 		timer = 0
 	end
