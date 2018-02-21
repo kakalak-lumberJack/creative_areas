@@ -109,7 +109,7 @@ minetest.register_globalstep(function(dtime)
 					if not minetest.check_player_privs(pname, {creative = true}) then
 						privs.creative = true
 						minetest.set_player_privs(pname, privs)
-						local context = {page = sfinv.get_homepage_name(player)}--minetest.get_inventory{{type="detached", name="creative_"..pname}}--{page = sfinv.pages["creative_"..pname]}
+						local context = {page = sfinv.get_homepage_name(player)}--minetest.get_inventory{{type="detached", name="creative_"..pname}}--{page = sfinv.pages["creative_"..pname]}						
 						sfinv.set_player_inventory_formspec(player, context)
 						local invlist = inv:get_list("main")
 						inv:set_list("saved", invlist)
@@ -128,7 +128,7 @@ minetest.register_globalstep(function(dtime)
 						local saved = inv:get_list("saved")
 						if saved ~= nil then
 							inv:set_list("main", saved)
-						end
+						end	
 						local context = {page = sfinv.get_homepage_name(player)}
 						sfinv.set_player_inventory_formspec(player, context)
 						minetest.chat_send_player(pname, "You have left creative area.")
