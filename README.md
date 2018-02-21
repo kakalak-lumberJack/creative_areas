@@ -8,9 +8,10 @@ Players with the 'privs' priv will not have privileges or inventories affected m
 * Use /rm_creative_areas <area ID number> to remove an area from the list.
 * Use /ls_creative_areas to see a list of creative areas and respective area IDs.
 
-Depends on [Advanced Areas Mod](https://github.com/ShadowNinja/areas) by Shadow Ninja and the [Creative](https://github.com/minetest/minetest_game/tree/master/mods/creative) mod included in Minetest Game.
+Depends on [Advanced Areas Mod](https://github.com/ShadowNinja/areas) by Shadow Ninja and the [Creative](https://github.com/minetest/minetest_game/tree/master/mods/creative) mod included in Minetest Game 0.5.0.
 
-This mod is compatible with Minetest 0.4.16 and up.
+The creative mod from minetest_game 0.5.0-dev is included in this modpack for convenience of users on Minetest 0.4.16 
+It is not necessary to enable the creative mod for users of 0.5.0-dev.
 
 MIT License:
 Copyright 2018 kakalak-lumberJack
