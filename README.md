@@ -1,6 +1,6 @@
 # Creative Areas 
 
-Creative Areas is a minetest mod allowing areas defined by the Areas mod to be designated as creative/sandbox areas adjusting players privliges and inventory formspecs appropriately as they leave or enter these areas. Items mined or taken from creative inventory inside creative area will be removed from players inventories upon leaving creative areas.
+Creative Areas is a minetest mod allowing areas defined by the Areas mod to be designated as creative/sandbox areas adjusting players privileges and inventory formspecs appropriately as they leave or enter these areas. Items mined or taken from creative inventory inside creative area will be removed from players inventories upon leaving creative areas.
 
 Players with the 'privs' priv will not have privileges or inventories affected moving in and out of these areas.
 
